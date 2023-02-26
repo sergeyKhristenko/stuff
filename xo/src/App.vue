@@ -82,41 +82,48 @@ function setName(event, player) {
 
 <template>
   <div class="container">
-    <div v-for="player in players" :key="player.sign" class="player-name">
-      <span
-        class="input"
-        contenteditable
-        @input="(event) => setName(event, player)"
-      >{{ player.name }}</span>
-      wins: {{ player.wins }}
-    </div>
-    <div class="board">
-      <div
-        v-for="(cell, i) of board"
-        :key="i"
-        class="cell"
-        :class="[
-          getClass(i),
-          winner?.coordinates?.includes(i) ? 'win-color' : null,
-        ]"
-        @click="setValue(i)"
-      >
-        <span class="cell" :class="!isBoardFilled ? 'border-round' : null">{{
-          cell
-        }}</span>
+    <div class="board-container">
+      <div class="players-container">
+        <div v-for="player in players" :key="player.sign" class="player-name">
+          <span
+            class="input"
+            contenteditable
+            @input="(event) => setName(event, player)"
+            >{{ player.name }}</span
+          >
+          wins: {{ player.wins }}
+        </div>
+      </div>
+      <div class="board">
+        <div
+          v-for="(cell, i) of board"
+          :key="i"
+          class="cell"
+          :class="[
+            getClass(i),
+            winner?.coordinates?.includes(i) ? 'win-color' : null,
+          ]"
+          @click="setValue(i)"
+        >
+          <span class="cell" :class="!isBoardFilled ? 'border-round' : null">{{
+            cell
+          }}</span>
+        </div>
       </div>
     </div>
-    <div v-if="isBoardFilled" class="alert">
-      <p v-if="winner">
-        <span class="win-color font-big">{{ winner.player.name }}</span> wins!
+    <div v-if="isBoardFilled" class="alert font-big">
+      <p v-if="winner" style="margin-bottom: 0px;">
+        <span class="win-color">{{ winner.player.name }}</span> wins!
       </p>
       <p v-else>DRAW</p>
-      <button @click="resetBoard()">play again</button>
+      <button @click="resetBoard()" class="playagain-button">play again</button>
     </div>
   </div>
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Finger+Paint&display=swap');
+
 body {
   margin: 0;
 }
@@ -125,14 +132,13 @@ body {
 .container {
   padding: 8px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  font-family: 'Finger Paint', cursive;
 
   background: ghostwhite;
   color: dimgray;
-  font-family: serif;
   text-align: center;
 }
 .board {
@@ -142,6 +148,8 @@ body {
   border-radius: 15px;
   padding: 100px;
   width: 304px;
+  background-color: ghostwhite;
+  color: black;
   position: relative;
   box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
     rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
@@ -153,7 +161,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: sans-serif;
   font-size: 75px;
   cursor: not-allowed;
 }
@@ -177,27 +184,25 @@ body {
   border-top: 2px solid gray;
 }
 .win-color {
-  color: orangered;
+  color: red;
 }
 .font-big {
   font-size: 25px;
-  font-family: sans-serif;
 }
 
 // modal
 .alert {
   height: 75px;
   display: inline-block;
-  background: ghostwhite;
+  // background: ghostwhite;
   position: absolute;
   z-index: 10;
   border-radius: 20px;
-  box-shadow: 0 0 75px 2px dimgray;
   animation: larger 0.5s;
   animation-fill-mode: forwards;
   box-sizing: content-box;
   padding: 30px;
-  top: 10%;
+  top: 5%;
 }
 
 .player-name {
@@ -210,5 +215,17 @@ body {
   font-family: inherit;
   font-size: inherit;
   padding: 1px 6px;
+}
+.players-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+}
+.board-container {
+  width: 500px;
+}
+.playagain-button {
+  font-family: inherit;
+  cursor: pointer;
 }
 </style>
